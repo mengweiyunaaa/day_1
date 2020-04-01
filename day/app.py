@@ -2,6 +2,8 @@ from flask import Flask,render_template
 
 app = Flask(__name__)
 @app.route('/')
+@app.route('/index')
+
 def index():
     name = 'mwy'
     movies = [
@@ -19,3 +21,7 @@ def index():
 
     ]
     return render_template('index.html',name=name,movies=movies)
+@app.route('/index/<name>')
+def home(name):
+    print(url_for('home',name='mwy'))
+    return 'hello,%s'%name
