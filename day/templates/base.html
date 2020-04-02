@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css')}}">
+    <title>{{ name.name }}的电影列表</title>
+    {%endblock%}
+</head>
+<body>
+    
+    <h2>{{ name.name }}的列表</h2>
+<nav>
+    <ul>
+        <li>
+            <a href="{{ url_for('index') }}">首页</a>
+        </li>
+    </ul>
+</nav>
+{% block content %}{%endblock%}
+    <footer>&copy;<a href='http:\\www.mengweiyun.club'>网址</a></footer><br>
+   <img src="{{ url_for('static',filename='images/ava.jpg') }}" alt="*" style="width: 800px;">
+</body>
+</html>
