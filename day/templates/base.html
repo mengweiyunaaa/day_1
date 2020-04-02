@@ -10,9 +10,12 @@
     {%endblock%}
 </head>
 <body>
-    
+    <h1>{% for mes in get_flashed_messages() %}
+        {{mes}}
+        {% endfor %}
+    </h1>
     <h2>{{ name.name }}的列表</h2>
-<nav>
+<nav> 
     <ul>
         <li>
             <a href="{{ url_for('index') }}">首页</a>

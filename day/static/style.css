@@ -24,9 +24,9 @@ nav li {
     float: left;
 }
 
-a {
+nav li a {
     display: block;
-    color:whitesmoke;
+    color:blue;
      
 }
 a:hover{

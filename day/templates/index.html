@@ -2,10 +2,23 @@
 {% block content %}
 {# length过滤器获取长度 #}
 <p>{{ movies|length}}</p>
+<form action="" method="POST">
+    movie-name: <input type="text" name='title' autocomplete="off" required>
+        <input type="submit" name='submit' value="添加">
+
+</form>
 <ul>
     {% for movie in movies %}
     <li>
         {{movie.title}}
+        <a href='https://v.qq.com/x/search/?q={{ movie.title }}'>视频</a>
+
+        <a href="{{url_for('edit',movie_id=movie.id)}}">编辑</a>
+        <form action="{{url_for('delete',movie_id=movie.id)}}"  method='post' >
+            <input type="submit" name='delete' value='删除' onclick='returnconfim("是否删除？")'>
+        </form>
+
+        
     </li>
     {% endfor %}
 </ul>

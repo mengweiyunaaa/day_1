@@ -1,4 +1,4 @@
-from flask import Flask,render_template
+from flask import Flask,render_template,request,redirect,flash,url_for
 from flask_sqlalchemy import SQLAlchemy
 import sys
 import click
@@ -14,6 +14,7 @@ app = Flask(__name__)
 #配置
 app.config['SQLALCHEMY_DATABASE_URI'] = pre + os.path.join(app.root_path,'data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'dev'
 db = SQLAlchemy(app)
 
 
@@ -59,10 +60,23 @@ def forge():
     db.session.commit()
     click.echo('导入数据完成')
 #首页    视图中
-@app.route('/')
-@app.route('/index')
+@app.route('/',methods=['GET','POST'])
+@app.route('/index',methods=['GET','POST'])
 
 def index():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        if not title:
+            
+            flash('请输入')
+            return redirect(url_for('index'))
+        movie = Movie(title=title)
+        db.session.add(movie)
+        db.session.commit()
+        flash('ok')
+        return redirect(url_for('index'))
+
+
     # user = User.query.first()
     movies = Movie.query.all()
     return render_template('index.html',movies=movies)
@@ -81,3 +95,34 @@ def inject_users():
 # def home(name):
 #     print(url_for('home',name='mwy'))
 #     return 'hello,%s'%name
+#改   编辑
+@app.route('/movie/edit/<int:movie_id>',methods=['GET','POST'])
+def edit(movie_id):
+    movie = Movie.query.get_or_404(movie_id)
+    if request.method == 'POST':
+        title = request.form.get('title')
+        if not title:
+            
+            flash('请输入')
+            return redirect(url_for('edit'),movie_id=movie_id)
+        movie.title = title
+       
+        db.session.commit()
+        flash('修改成功')
+        return redirect(url_for('index'))
+    
+    return render_template('edit.html',movie=movie)
+#删
+@app.route('/movie/delete/<int:movie_id>',methods=['GET','POST'])
+def delete(movie_id):
+    movie = Movie.query.get_or_404(movie_id)
+    db.session.delete(movie)
+    db.session.commit()
+    flash('删除成功')
+    return redirect(url_for('index'))
+
+
+
+
+
+
