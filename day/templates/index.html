@@ -15,7 +15,7 @@
 
         <a href="{{url_for('edit',movie_id=movie.id)}}">编辑</a>
         <form action="{{url_for('delete',movie_id=movie.id)}}"  method='post' >
-            <input type="submit" name='delete' value='删除' onclick='returnconfim("是否删除？")'>
+            <input type="submit" name='delete' value='删除' onclick='return confim("是否删除？")'>
         </form>
 
         

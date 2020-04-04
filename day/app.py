@@ -3,7 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 import sys
 import click
 import os
-from flask_login import LoginManager,UserMixin,login_user,logout_user
+
+from flask_login import LoginManager,UserMixin,login_user,logout_user,login_required,current_user
 from werkzeug.security import generate_password_hash,check_password_hash
 #配置数据库时报错
 WIN = sys.platform.startswith('win')
@@ -23,8 +24,11 @@ login_manager = LoginManager(app)
 @login_manager.user_loader
 def load_user(user_id):
     user = User.query.get(int(user_id))
-    return 
+    return user
 
+
+login_manager.login_view = 'login'
+login_manager.login_message = '未登录'
 #模型
 class User(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key=True)
@@ -32,7 +36,7 @@ class User(db.Model,UserMixin):
     username = db.Column(db.String(20))
     password_hash = db.Column(db.String(200))
     def set_password(self,password):
-        self.password_hash = generate_password_hash
+        self.password_hash = generate_password_hash(password)
     def validate_password(self,password):
         return check_password_hash(self.password_hash,password)
 
@@ -81,7 +85,7 @@ def forge():
 def admin(username,password):
     db.create_all()
     user = User.query.first()
-    if user is not None:
+    if user:
         click.echo('更新用户')
         user.username = username
         user.set_password(password)
@@ -99,6 +103,9 @@ def admin(username,password):
 
 def index():
     if request.method == 'POST':
+        if not current_user.is_authenticated:
+            flash('未登录不能添加')
+            return redirect(url_for('index'))
         title = request.form.get('title')
         if not title:
             
@@ -131,6 +138,7 @@ def inject_users():
 #     return 'hello,%s'%name
 #改   编辑
 @app.route('/movie/edit/<int:movie_id>',methods=['GET','POST'])
+@login_required
 def edit(movie_id):
     movie = Movie.query.get_or_404(movie_id)
     if request.method == 'POST':
@@ -148,6 +156,7 @@ def edit(movie_id):
     return render_template('edit.html',movie=movie)
 #删
 @app.route('/movie/delete/<int:movie_id>',methods=['GET','POST'])
+@login_required
 def delete(movie_id):
     movie = Movie.query.get_or_404(movie_id)
     db.session.delete(movie)
@@ -156,7 +165,7 @@ def delete(movie_id):
     return redirect(url_for('index'))
 @app.route('/login',methods=['GET','POST'])
 def login():
-    if request.method == 'Post':
+    if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         if not username or not password:
@@ -164,21 +173,40 @@ def login():
             return redirect(url_for('login'))
 
         user = User.query.first()
+        #验证信息是否一致
+
         if username == user.username and user.validate_password(password):
             login_user(user)
             flash('登陆成功')
             return redirect(url_for('index'))
-        else:
-            flash('验证错误')
-            return redirect(url_for('login'))
+        
+        flash('验证错误')
+        return redirect(url_for('index'))
     return render_template('login.html')
 
 @app.route('/logout',methods=['GET','POST'])
+@login_required
 def logout():
     logout_user()
     flash('已注销')
+    return redirect(url_for('index')) 
 
 
 
+#设置
+@app.route('/settings',methods=['GET','POST'])
+@login_required
+def settings():
+    if request.method == 'post':
+        name = request.form['name']
+        if not name or len(name) > 20:
+            flash('输入非法')
+            return redirect(url_for('settings'))
+        current_user.name = name
+        db.session.commit()
+        flash('设置name成功')
+        return redirect(url_for('index'))
+    return render_template('settings.html')
+       
 
 
