@@ -1,6 +1,7 @@
 import unittest
 
-from app import *
+from blog import app,db
+from blog.models import User,Movie
 
 class ProjectTestCase(unittest.TestCase):
 #测试固件
