@@ -60,6 +60,13 @@
                     </div>
              </li>
           </ul>
+          <!--改变标题-->
+          <div class="footer">
+              <hr>
+              变标题
+              <input type="text" value="标题" class='js-change-title'>
+          </hr>
+          </div>
     </div>
 </body>
 
@@ -68,7 +75,7 @@
         // 等待所有的html元素加载完成之后再执行
         $(document).ready(function(){
             function onAdd(){
-                var $ul,$li,$label,$div,value;
+                var $ul,$li,$label,$div,value; 
                 value = $('.js-new-item').val()
                 if(value === ''){
                     return;
@@ -86,9 +93,13 @@
             function toggleRemoved(ev){
                 $(ev.currentTarget).closest('li').toggleClass('removed');
             }
+            function onchangeTitle(){
+                $('h2').text($('.js-change-title').val())
+            }
     
             $('.js-add').click(onAdd)
             $('.js-item').click(toggleRemoved)
+            $('.js-change-title').keyup(onchangeTitle)
         })
     </script>
 </html>
