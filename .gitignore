@@ -7,3 +7,4 @@ env
 data.db
 htmlcov/
 .coverage
+node_modules/
