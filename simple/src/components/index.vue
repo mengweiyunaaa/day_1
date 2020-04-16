@@ -29,7 +29,10 @@
             <div class="index-left-block lastest-news">
                 <h2>最新消息</h2>
                 <ul>
-                    <li>aaaa</li>
+                    
+                    <li v-for='news in newsList'>
+                        <a v-bind:href="news.url">{{ news.title }}</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -74,9 +77,22 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
+    mounted() {
+        axios.get("getNewsList")
+        .then((response) => {
+            console.log(response)
+            this.newsList = response.data.list
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    },
     data() {
         return {
+            newsList:[],
             productlist:{
                 pc:{
                     title:"PC产品",
