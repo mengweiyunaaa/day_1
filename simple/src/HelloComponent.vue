@@ -7,7 +7,7 @@ export default {
     name:"HellComponent",
     data(){
         return{
-            msg:"欢迎haominmin"
+            msg:"欢迎"
         }
     },
 }
@@ -15,8 +15,5 @@ export default {
 
 <style>
 
-h1{
-    color: red;
 
-}
 </style>
