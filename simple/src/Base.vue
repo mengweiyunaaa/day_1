@@ -22,15 +22,19 @@
     <div class="app-foot">
       <p>&copy; mwy</p>
     </div>
-    <HelloComponent/>
+    <mylogin></mylogin>
   </div>
+  
 </template>
 
 
 <script>
 // 使用就得引入 建议不加后缀名  
-
+import Mylogin from './components/myLogin'
 export default {
+  components:{
+    Mylogin
+  }
 };
 </script>
 

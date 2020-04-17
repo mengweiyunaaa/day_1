@@ -37,40 +37,17 @@
             </div>
         </div>
         <div class="index-right">
-            <div style="width:900px;height:300px;background:red;margin:0 auto;text-align:center;line-height:300px;font-size:50px">slider</div>
+            <slider-component></slider-component>
             <div class="index-board-list">
-                <div class="index-board-item">
+                <div class="index-board-item" v-for="item in boardList">
                     <div class="index-board-item-inner">
                         
-                        <h2>寒假快乐</h2>
+                        <h2>{{ item.title }}</h2>
                         <p>快乐个鸡</p>
                         <div class="index-board-button">立即开学</div>
                     </div>
                 </div>
-                <div class="index-board-item">
-                    <div class="index-board-item-inner">
-                        
-                        <h2>寒假快乐</h2>
-                        <p>快乐个鸡</p>
-                        <div class="index-board-button">立即开学</div>
-                    </div>
-                </div>
-                <div class="index-board-item">
-                    <div class="index-board-item-inner">
-                        
-                        <h2>寒假快乐</h2>
-                        <p>快乐个鸡</p>
-                        <div class="index-board-button">立即开学</div>
-                    </div>
-                </div>
-                <div class="index-board-item">
-                    <div class="index-board-item-inner">
-                        
-                        <h2>寒假快乐</h2>
-                        <p>快乐个鸡</p>
-                        <div class="index-board-button">立即开学</div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -78,8 +55,12 @@
 
 <script>
 import axios from 'axios'
-
+import SliderComponent from './silderCompont'
 export default {
+    components:{
+        SliderComponent
+    },
+  
     mounted() {
         axios.get("getNewsList")
         .then((response) => {
@@ -88,59 +69,33 @@ export default {
         })
         .catch((error) => {
             console.log(error)
+        }),
+        axios.get("getProductList")
+        .then((response) => {
+            console.log(response)
+            this.productlist = response.data
+        })
+        .catch((error) => {
+            console.log(error)
+        }),
+        axios.get("getBoardList")
+        .then((response) => {
+            console.log(response)
+            this.boardList = response.data
+        })
+        .catch((error) => {
+            console.log(error)
         })
     },
+    
+  
+    
     data() {
         return {
             newsList:[],
-            productlist:{
-                pc:{
-                    title:"PC产品",
-                    list:[
-                        {
-                            title:'数据统计',
-                            url:"http://starcraft.com"
-                        },
-                        {
-                            title:'数据预测',
-                            url:"http://warcaft.com"
-                        },
-                        {
-                            title:'流量分析',
-                            url:"http://overwatch.com",
-                            hot:true
-                        },
-                        {
-                            title:'广告发布',
-                            url:"http://hearstone.com"
-                        },
-                        
-                    ]
-                },
-                app:{
-                    title:"手机应用类",
-                    last:true,
-                    list:[
-                        {
-                            title:'91助手',
-                            url:"http://weixin.com"
-                        },
-                        {
-                            title:'产品助手',
-                            url:"http://starecaft.com",
-                            hot:true
-                        },
-                        {
-                            title:'智能地图',
-                            url:"http://maps.com"
-                        },
-                        {
-                            title:'语音助手',
-                            url:"http://phone.com"
-                        }
-                    ]
-                }
-            }
+            productlist:null,
+            boardList:null
+            
         }
     },
 }
