@@ -8,7 +8,7 @@
         </div>
         <!-- dots -->
         <!-- tupianbiaoti -->
-        <h2 v-for='(item,title) in sliderImgList'>{{ title }}</h2>
+        <h2 v-for='(imgUrl,title) in sliderImgList'>{{ title }}</h2>
         <!-- javascript:void(0)禁止跳转 -->
         <a v-on:click='preHandler' class='btn pre-btn' href="javascript:void(0)">&lt;</a>
         <a v-on:click='nextHandler' class='btn next-btn' href="javascript:void(0)">&gt;</a>

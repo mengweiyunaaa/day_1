@@ -6,7 +6,7 @@
         <img src="./assets/logo.png" alt="">
         <div class="head-nav">
           <ul>
-            <li>登录</li>
+            <li v-on:click='ShowLoginView'>登录</li>
             <li class='nav-pile'>|</li>
             <li>注册</li>
             <li class='nav-pile'>|</li>
@@ -22,7 +22,7 @@
     <div class="app-foot">
       <p>&copy; mwy</p>
     </div>
-    <mylogin></mylogin>
+    <Mylogin v-show="isShowLoginView"></Mylogin>
   </div>
   
 </template>
@@ -34,6 +34,16 @@ import Mylogin from './components/myLogin'
 export default {
   components:{
     Mylogin
+  },
+  data(){
+    return{
+      isShowLoginView:false
+    }
+  },
+  methods:{
+    ShowLoginView(){
+      this.isShowLoginView=true
+    }
   }
 };
 </script>
